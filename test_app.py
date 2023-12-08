@@ -7,26 +7,25 @@ app.config['SQLALCHEMY_ECHO'] = False
 
 app.config['TESTING'] = True
 
-# app.app_context().push()
-# connect_db(app)
-
-db.drop_all()
-db.create_all()
+with app.app_context():
+    db.drop_all()
+    db.create_all()
 
 class UserRoutesTestCase(TestCase):
     def setUp(self):
+        with app.app_context():
+            User.query.delete()
 
-        User.query.delete()
+            matt = User(first_name='Matt', last_name='Ozuna')
 
-        matt = User(first_name='Matt', last_name='Ozuna')
+            db.session.add(matt)
+            db.session.commit() 
 
-        db.session.add(matt)
-        db.session.commit() 
-
-        self.user_id = matt.id
+            self.user_id = matt.id
 
     def tearDown(self):
-        db.session.rollback()
+        with app.app_context():
+            db.session.rollback()
 
     def test_redirect_users_page(self):
         with app.test_client() as client:

@@ -10,7 +10,6 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
 app.config['SECRET_KEY'] = "supersecret2224"
 
-app.app_context().push()
 connect_db(app)
 
 @app.route('/')
