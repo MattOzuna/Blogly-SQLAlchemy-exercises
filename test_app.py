@@ -7,8 +7,8 @@ app.config['SQLALCHEMY_ECHO'] = False
 
 app.config['TESTING'] = True
 
-app.app_context().push()
-connect_db(app)
+# app.app_context().push()
+# connect_db(app)
 
 db.drop_all()
 db.create_all()
