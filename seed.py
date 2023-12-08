@@ -6,15 +6,9 @@ db.drop_all()
 db.create_all()
 
 # If table isn't empty, empty it
-# User.query.delete()
+User.query.delete()
 
-#add me as first user
-# me = User(
-#         first_name='Matt',
-#         last_name='Ozuna')
+matt = User(first_name='Matt', last_name='Ozuna')
 
-#Add me to session
-# db.session.add(me)
-
-#Commit to db
-# db.session.commit
+db.session.add(matt)
+db.session.commit()

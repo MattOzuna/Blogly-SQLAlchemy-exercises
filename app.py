@@ -10,8 +10,8 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
 app.config['SECRET_KEY'] = "supersecret2224"
 
-app.app_context().push()
-connect_db(app)
+# app.app_context().push()
+# connect_db(app)
 
 @app.route('/')
 def home():
@@ -30,7 +30,7 @@ def create_user():
 
 @app.route('/users/new', methods=["POST"])
 def submit_user():
-    '''takes form data nd makes anew user'''
+    '''takes form data and makes a new user'''
     first_name = request.form['first_name']
     last_name = request.form['last_name']
     image_url = request.form['image_url']

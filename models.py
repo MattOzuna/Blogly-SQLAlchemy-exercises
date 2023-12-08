@@ -13,13 +13,13 @@ class User(db.Model):
     id = db.Column(db.Integer,
                    primary_key=True,
                    autoincrement=True)
-    first_name = db.Column(db.Text,
+    first_name = db.Column(db.String,
                          nullable=False)
     
-    last_name = db.Column(db.Text,
+    last_name = db.Column(db.String,
                         nullable=False)
     
-    image_url = db.Column(db.Text,
+    image_url = db.Column(db.String,
                         nullable=True,
                         default='https://upload.wikimedia.org/wikipedia/commons/d/d1/Image_not_available.png')
     
