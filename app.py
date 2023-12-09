@@ -1,7 +1,8 @@
 """Blogly application."""
 
 from flask import Flask, request, render_template,  redirect, flash, session
-from models import db, connect_db, User
+from models import db, connect_db, User, Post
+from services import addUserToDb, editUserInDb
 
 app = Flask(__name__)
 
@@ -17,35 +18,33 @@ def home():
     '''redirects to list of users'''
     return redirect ('/users')
 
+
 @app.route('/users')
 def list_users():
     '''Shows list of all users in db'''
     users = User.query.all()
     return render_template('users.html', users=users)
 
+
 @app.route('/users/new')
 def create_user():
     return render_template('create_user.html')
 
+
 @app.route('/users/new', methods=["POST"])
 def submit_user():
     '''takes form data and makes a new user'''
-    first_name = request.form['first_name']
-    last_name = request.form['last_name']
-    image_url = request.form['image_url']
-    image_url = image_url if image_url else None
+    new_user_id = addUserToDb(request.form)
+    return redirect(f'/users/{new_user_id}')
 
-    new_user = User(first_name=first_name, last_name=last_name, image_url=image_url)
-    db.session.add(new_user)
-    db.session.commit()
-
-    return redirect(f'/users/{new_user.id}')
 
 @app.route('/users/<int:user_id>')
 def show_user(user_id):
     '''Shows User details'''
-    user = User.query.get_or_404(user_id)
-    return render_template('user_detail.html', user = user)
+    user = User.query.filter_by(id = user_id).one()
+    posts = Post.query.filter_by(user_id = user_id).all()
+    return render_template('user_detail.html', user=user, posts=posts)
+
 
 @app.route('/users/<int:user_id>/edit')
 def edit_user(user_id):
@@ -53,25 +52,72 @@ def edit_user(user_id):
     user = User.query.filter_by(id=user_id).one()
     return render_template('edit_user.html', user = user)
 
+
 @app.route('/users/<int:user_id>/edit', methods=["POST"])
 def change_user(user_id):
     '''takes form data and makes a new user'''
-    user = User.query.filter_by(id=user_id).one()
+    editUserInDb(user_id, request.form)
+    return redirect(f'/users/{user_id}')
 
-    user.first_name = request.form['first_name']
-    user.last_name = request.form['last_name']
-    image_url = request.form['image_url']
-    image_url = image_url if image_url else 'https://upload.wikimedia.org/wikipedia/commons/d/d1/Image_not_available.png'
-    user.image_url = image_url
-    
-    db.session.commit()
-
-    return redirect(f'/users/{user.id}')
 
 @app.route('/users/<int:user_id>/delete', methods=["POST"])
 def delete_user(user_id):
-    '''takes form data nd makes anew user'''
+    '''takes user id and deletes from database before redirecting back to home page'''
     User.query.filter_by(id=user_id).delete()
     db.session.commit()
-
     return redirect(f'/users')
+
+
+@app.route('/users/<int:user_id>/posts/new')
+def create_post(user_id):
+    '''form for new posts'''
+    user = User.query.filter_by(id=user_id).one()
+    return render_template('create_post.html', user=user)
+
+
+@app.route('/users/<int:user_id>/posts/new', methods=["POST"])
+def new_post(user_id):
+    '''takes post form data and adds to the database'''
+    title = request.form['title']
+    content = request.form['content']
+
+    new_post = Post(title=title, content=content, user_id=user_id)
+    db.session.add(new_post)
+    db.session.commit()
+
+    return redirect(f'/users/{user_id}')
+
+
+@app.route('/posts/<int:post_id>')
+def show_post(post_id):
+    '''shows post'''
+    post = Post.query.filter_by(id=post_id).one()
+    user = User.query.filter_by(id=post.user_id).one()
+    return render_template('show_post.html', post=post, user=user)
+
+
+@app.route('/posts/<int:post_id>/delete', methods=['POST'])
+def delete_post(post_id):
+    '''deletes post from db and send the user back to that post's user page'''
+    post = Post.query.filter_by(id=post_id).one()
+    Post.query.filter_by(id=post_id).delete()
+    db.session.commit()
+    return redirect(f'/users/{post.user_id}')
+
+
+@app.route('/posts/<int:post_id>/edit')
+def edit_post(post_id):
+    '''shows for for editing the original post'''
+    post = Post.query.filter_by(id=post_id).one()
+    return render_template(f'edit_post.html', post=post)
+
+@app.route('/posts/<int:post_id>/edit', methods=['POST'])
+def change_post(post_id):
+    '''if there are edits to the post, updates the post and submits to the db'''
+    post = Post.query.filter_by(id=post_id).one()
+    post.title = request.form['title'] if request.form['title'] else post.title
+    post.content = request.form['content'] if request.form['content'] else post.content
+    
+    db.session.commit()
+    return redirect(f'/users/{post.user_id}')
+

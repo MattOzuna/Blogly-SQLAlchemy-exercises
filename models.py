@@ -1,3 +1,4 @@
+import datetime
 from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
@@ -22,6 +23,36 @@ class User(db.Model):
     image_url = db.Column(db.String,
                         nullable=True,
                         default='https://upload.wikimedia.org/wikipedia/commons/d/d1/Image_not_available.png')
+    
+    def __repr__(self):
+        return f"<id: {self.id} Name:{self.first_name} {self.last_name} >"
+
+class Post(db.Model):
+    __tablename__ = 'posts'
+
+    id = db.Column(db.Integer,
+                   primary_key=True,
+                   autoincrement=True)
+    
+    title = db.Column(db.Text,
+                         nullable=False)
+    
+    content = db.Column(db.Text,
+                        nullable=False)
+    
+    created_at = db.Column(db.DateTime,
+                        nullable=False,
+                        default=datetime.datetime.now)
+    
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    user = db.relationship('User', backref='posts', lazy=True)
+
+    
+
+    def __repr__(self):
+        return f"<Post id: {self.id}, User id: {self.user_id}, Title:{self.title}, Content:{self.content}, Created at: {self.created_at} >"
+    
+    
     
     
     

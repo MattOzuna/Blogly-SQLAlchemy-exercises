@@ -8,10 +8,9 @@
     <img src={{user.image_url}} alt="User image">
 </div>
 
-<ul>
-    <li>{{user.first_name}}</li>
-    <li>{{user.last_name}}</li>
-</ul>
+<p>
+    {{user.first_name}} {{user.last_name}}
+</p>
 
 <form action="/users/{{user.id}}/edit">
     <button>Edit</button>
@@ -20,5 +19,15 @@
     <button>Delete</button>
 </form>
 
+<h1>Posts</h1>
+<ul>
+    {% for post in posts %}
+    <li><a href="/posts/{{post.id}}">{{post.title}}</a></li>
+    {% endfor %}
+</ul>
+
+<form action="/users/{{user.id}}/posts/new" method="GET">
+    <button>Add Post</button>
+</form>
 
 {% endblock %}
