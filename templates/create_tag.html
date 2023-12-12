@@ -1,0 +1,19 @@
+{% extends 'base.html'  %}
+{% block title %}
+
+New Tag
+
+{% endblock%}
+{% block content %}
+
+<h1>New Tag</h1>
+<form action="/tags/new" method="POST">
+    <div>
+        <label for="name">Name</label>
+        <input type="text" name="name" id="name">
+    </div>
+    <a href="/tags">Cancel</a>
+    <button>Create</button>
+</form>
+
+{% endblock %}

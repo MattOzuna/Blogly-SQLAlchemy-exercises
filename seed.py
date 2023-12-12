@@ -17,21 +17,20 @@ with app.app_context():
     db.session.add_all([new_post1,new_post2])
     db.session.commit()
 
-    new_tag1 = Tag(name='Cool')
+    new_tag1 = Tag(name='Cool', posts=[new_post1, new_post2])
     new_tag2 = Tag(name='Fun')
     new_tag3 = Tag(name='Amazing')
 
     db.session.add_all([new_tag1, new_tag2, new_tag3])
     db.session.commit()
 
-    new_post_tag1 = PostTag(post_id = new_post1.id,
-                            tag_id = new_tag1.id)
     
-    new_post_tag2 = PostTag(post_id = new_post1.id,
+    new_post_tag1 = PostTag(post_id = new_post1.id,
                             tag_id= new_tag3.id)
     
-    new_post_tag3 = PostTag(post_id = new_post2.id,
+    new_post_tag2 = PostTag(post_id = new_post2.id,
                             tag_id= new_tag2.id)
     
-    db.session.add_all([new_post_tag1, new_post_tag2, new_post_tag3])
+    
+    db.session.add_all([new_post_tag1, new_post_tag2])
     db.session.commit()

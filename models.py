@@ -46,7 +46,7 @@ class Post(db.Model):
                         default=datetime.datetime.now)
     
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    user = db.relationship('User', backref='posts', lazy=True)
+    user = db.relationship('User', backref='posts', lazy='subquery')
 
     
 
@@ -66,7 +66,8 @@ class Tag(db.Model):
     
     posts = db.relationship('Post',
                            secondary='post_tag',
-                           backref='tags')
+                           backref='tags',
+                           lazy=True)
     
     
 class PostTag(db.Model):

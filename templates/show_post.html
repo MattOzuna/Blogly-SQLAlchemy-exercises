@@ -6,6 +6,13 @@
 
 <h1>{{post.title}}</h1>
 <p>{{post.content}}</p>
+
+{% for i in tags %}
+{% for tag in i %}
+<span><a href="/tags/{{tag.id}}">{{tag.name}}</a></span>
+{% endfor %}
+{% endfor %}
+
 <p>By {{user.first_name}} {{user.last_name}}</p>
 <form action="/posts/{{post.id}}/delete" method="POST">
     <a href="/users/{{post.user_id}}">Cancel</a>
