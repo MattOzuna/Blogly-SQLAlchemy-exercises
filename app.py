@@ -111,13 +111,14 @@ def edit_post(post_id):
     post = Post.query.filter_by(id=post_id).one()
     return render_template(f'edit_post.html', post=post)
 
+
 @app.route('/posts/<int:post_id>/edit', methods=['POST'])
 def change_post(post_id):
     '''if there are edits to the post, updates the post and submits to the db'''
     post = Post.query.filter_by(id=post_id).one()
     post.title = request.form['title'] if request.form['title'] else post.title
     post.content = request.form['content'] if request.form['content'] else post.content
-    
+
     db.session.commit()
     return redirect(f'/users/{post.user_id}')
 
