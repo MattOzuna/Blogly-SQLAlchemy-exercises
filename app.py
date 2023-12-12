@@ -73,7 +73,8 @@ def delete_user(user_id):
 def create_post(user_id):
     '''form for new posts'''
     user = User.query.filter_by(id=user_id).one()
-    return render_template('create_post.html', user=user)
+    all_tags = db.session.query(Tag).all()
+    return render_template('create_post.html', user=user, tags=all_tags)
 
 
 @app.route('/users/<int:user_id>/posts/new', methods=["POST"])
@@ -81,8 +82,9 @@ def new_post(user_id):
     '''takes post form data and adds to the database'''
     title = request.form['title']
     content = request.form['content']
+    tag_ids = [int(id) for id in request.form.getlist('tags')]
 
-    new_post = Post(title=title, content=content, user_id=user_id)
+    new_post = Post(title=title, content=content, user_id=user_id, tags=Tag.query.filter(Tag.id.in_(tag_ids)).all())
     db.session.add(new_post)
     db.session.commit()
 
@@ -94,7 +96,7 @@ def show_post(post_id):
     '''shows post'''
     post = Post.query.filter_by(id=post_id).one()
     user = User.query.filter_by(id=post.user_id).one()
-    tags = db.session.query(Tag,PostTag).join(PostTag).filter_by(post_id=post.id).all()
+    tags = post.tags
     return render_template('show_post.html', post=post, user=user, tags=tags)
 
 
@@ -111,13 +113,17 @@ def delete_post(post_id):
 def edit_post(post_id):
     '''shows for for editing the original post'''
     post = Post.query.filter_by(id=post_id).one()
-    return render_template(f'edit_post.html', post=post)
+    all_tags = db.session.query(Tag).all()
+    return render_template(f'edit_post.html', post=post, tags=all_tags)
 
 
 @app.route('/posts/<int:post_id>/edit', methods=['POST'])
 def change_post(post_id):
     '''if there are edits to the post, updates the post and submits to the db'''
     post = Post.query.filter_by(id=post_id).one()
+    tag_ids = [int(id) for id in request.form.getlist('tags')]
+
+    post.tags = Tag.query.filter(Tag.id.in_(tag_ids)).all()
     post.title = request.form['title'] if request.form['title'] else post.title
     post.content = request.form['content'] if request.form['content'] else post.content
 
@@ -136,8 +142,12 @@ def all_tags():
 @app.route('/tags/<int:tag_id>')
 def show_tag(tag_id):
     tag = db.session.query(Tag).filter_by(id=tag_id).one()
-    posts = db.session.query(Post, PostTag).join(PostTag).filter_by(tag_id=tag_id).all()
+    posts = tag.posts
     return render_template('show_tag.html', tag=tag, posts=posts)
+
+@app.route('/tags/new')
+def new_tag():
+    return render_template('create_tag.html')
 
 
 @app.route('/tags/new', methods=['POST'])
@@ -146,10 +156,6 @@ def add_tag():
     db.session.add(new_tag)
     db.session.commit()
     return redirect ('/tags')
-
-@app.route('/tags/new')
-def new_tag():
-    return render_template('create_tag.html')
 
 
 @app.route('/tags/<int:tag_id>/edit')

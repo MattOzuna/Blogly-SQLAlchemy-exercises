@@ -14,6 +14,17 @@ New Post
         <label for="content">Content</label>
         <input type="text" name="content">
     </div>
+
+    <fieldset>
+        <legend>Add a Tag:</legend>
+        {% for tag in tags %}
+        <div>
+            <input type="checkbox" name="tags" id="{{tag.name}}" value="{{tag.id}}">
+            <label for="{{tag.name}}">{{tag.name}}</label>
+        </div>
+        {% endfor %}
+    </fieldset>
+    
     <a href="/users/{{user.id}}">Cancel</a>
     <button>Add</button>
 </form>

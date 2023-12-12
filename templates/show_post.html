@@ -7,10 +7,8 @@
 <h1>{{post.title}}</h1>
 <p>{{post.content}}</p>
 
-{% for i in tags %}
-{% for tag in i %}
+{% for tag in tags %}
 <span><a href="/tags/{{tag.id}}">{{tag.name}}</a></span>
-{% endfor %}
 {% endfor %}
 
 <p>By {{user.first_name}} {{user.last_name}}</p>
