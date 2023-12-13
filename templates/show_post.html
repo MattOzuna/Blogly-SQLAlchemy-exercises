@@ -3,19 +3,21 @@
 {{post.title}}
 {% endblock%}
 {% block content %}
-
-<h1>{{post.title}}</h1>
-<p>{{post.content}}</p>
-
-{% for tag in tags %}
-<span><a href="/tags/{{tag.id}}">{{tag.name}}</a></span>
-{% endfor %}
-
-<p>By {{user.first_name}} {{user.last_name}}</p>
-<form action="/posts/{{post.id}}/delete" method="POST">
-    <a href="/users/{{post.user_id}}">Cancel</a>
-    <a href="/posts/{{post.id}}/edit">Edit</a>
-    <button>Delete</button>
-</form>
-
+<div class="container">
+    <h1 class="mb-3">{{post.title}}</h1>
+    <p class="mb-3">{{post.content}}</p>
+    <p class="mb-2">By {{user.first_name}} {{user.last_name}}</p>
+    <div>Tags:</div>
+    <div class="btn-group  btn-group-sm mb-3">
+        {% for tag in tags %}
+        <a href="/tags/{{tag.id}}" class="btn btn-primary">{{tag.name}}</a>
+        {% endfor %}
+    </div>
+    
+    <form action="/posts/{{post.id}}/delete" method="POST">
+        <a href="/users/{{post.user_id}}" class="btn btn-secondary">Cancel</a>
+        <a href="/posts/{{post.id}}/edit" class="btn btn-info">Edit</a>
+        <button class="btn btn-primary">Delete</button>
+    </form>
+</div>
 {% endblock %}

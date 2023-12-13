@@ -3,13 +3,15 @@
 Tags
 {% endblock %}
 {% block content %}
-<h1>Tags</h1>
-<ul>
-    {% for tag in tags %}
-    <li><a href="/tags/{{tag.id}}">{{tag.name}}</a></li>
-    {% endfor %}
-</ul>
-<form action="/tags/new">
-    <button>Add Tag</button>
-</form>
+<div class="container">
+    <h1 class="mb-3">All Tags</h1>
+    <ul>
+        {% for tag in tags %}
+        <li><a href="/tags/{{tag.id}}">{{tag.name}}</a></li>
+        {% endfor %}
+    </ul>
+    <form action="/tags/new">
+        <button class="btn btn-primary">Add Tag</button>
+    </form>
+</div>
 {% endblock %}

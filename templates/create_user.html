@@ -3,12 +3,20 @@
 Create User
 {% endblock%}
 {% block content %}
-
+<div class="container">
+    <h1 class="mb-3">Create User</h1>
 <form action="/users/new" method="POST">
-    <input type="text" name="first_name" placeholder="first name">
-    <input type="text" name="last_name" placeholder="last name">
-    <input type="text" name="image_url" placeholder="image url">
-    <button>Submit User</button>
+    <div class="mb-3">
+        <input type="text" name="first_name" placeholder="first name" class="form-control">
+    </div>
+    <div class="mb-3">
+        <input type="text" name="last_name" placeholder="last name" class="form-control">
+    </div>
+    <div class="mb-3">
+    <input type="text" name="image_url" placeholder="image url" class="form-control">
+    </div>
+    <a href="/users" class="btn btn-secondary">Cancel</a>
+    <button class="btn btn-primary">Submit User</button>
 </form>
-
+</div>
 {% endblock %}

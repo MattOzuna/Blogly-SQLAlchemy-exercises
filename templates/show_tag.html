@@ -1,10 +1,9 @@
 {% extends 'base.html' %}
 {% block title %}
-
 {{tag.name}}
-
 {% endblock %}
 {% block content %}
+<div class="container">
 <h1>{{tag.name}}</h1>
 
 {% if posts %}
@@ -19,12 +18,12 @@
 {% else %}
 <p>No posts</p>
 {% endif %}
-
-<form action="/tags/{{tag.id}}/edit">
-    <button>Edit</button>
-</form>
-<form action="/tags/{{tag.id}}/delete" method="POST">
-    <button>Delete</button>
-</form>
-
+            <form action="/tags/{{tag.id}}/edit">
+                <button class="btn btn-secondary">Edit</button>
+            <form action="/tags/{{tag.id}}/delete" method="POST">
+                <button class="btn btn-primary"
+                formaction="/tags/{{tag.id}}/delete"
+                formmethod="POST">Delete</button>
+            </form>
+</div>
 {% endblock %}

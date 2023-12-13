@@ -5,13 +5,15 @@
 
 {% endblock %}
 {% block content %}
-
-<h1>Edit {{tag.name}}</h1>
-<form action="/tags/{{tag.id}}/edit" method="POST">
-    <label for="name">Name</label>
-    <input type="text" name="name" id="name">
-    <a href="/tags/{{tag.id}}">Cancel</a>
-    <button>Edit</button>
+<div class="container">
+<h1>Edit {{tag.name}} Tag</h1>
+<form action="/tags/{{tag.id}}/edit" method="POST" class="mb-3">
+    <label for="name" class="form-label">Tag Name:</label>
+    <input type="text" name="name" id="name" class="form-control mb-3">
+    <div class="mb-3">
+        <a href="/tags/{{tag.id}}" class="btn btn-secondary">Cancel</a>
+        <button class="btn btn-primary">Edit</button>
+    </div>
 </form>
-
+</div>
 {% endblock %}
