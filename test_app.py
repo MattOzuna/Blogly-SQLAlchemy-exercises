@@ -42,8 +42,8 @@ class UserRoutesTestCase(TestCase):
             html = response.get_data(as_text=True)
 
             self.assertEqual(response.status_code, 200)
-            self.assertIn('<li>test</li>', html)
-            self.assertIn('<li>user</li>', html)
+            self.assertIn('<h1 class="mb-3">test user</h1>', html)
+            # self.assertIn('<li>user</li>', html)
 
     def test_edit_user(self):
         with app.test_client() as client:
@@ -52,8 +52,8 @@ class UserRoutesTestCase(TestCase):
             html = response.get_data(as_text=True)
 
             self.assertEqual(response.status_code, 200)
-            self.assertIn('<li>Test</li>', html)
-            self.assertIn('<li>user</li>', html)
+            self.assertIn('<h1 class="mb-3">Test user</h1>', html)
+            # self.assertIn('<li>user</li>', html)
 
     def test_delete_user(self):
         with app.test_client() as client:
